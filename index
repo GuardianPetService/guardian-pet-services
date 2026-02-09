@@ -7,23 +7,13 @@
 
 <style>
 body{margin:0;font-family:Arial;background:#0f172a;color:#e5e7eb}
-header{background:linear-gradient(90deg,#1e3a8a,#0f766e);padding:25px;text-align:center}
-nav{background:#020617;text-align:center;padding:10px}
-nav a{color:#38bdf8;margin:10px;text-decoration:none;font-weight:bold}
+header{background:#1e3a8a;padding:25px;text-align:center}
+nav{background:#020617;padding:10px;text-align:center}
+nav a{color:#38bdf8;margin:10px;text-decoration:none}
 section{padding:40px 20px}
-.container{max-width:1100px;margin:auto}
-.card{background:#020617;padding:25px;border-radius:15px;margin-bottom:20px;box-shadow:0 0 15px rgba(0,0,0,.6)}
-button{background:#0ea5e9;color:white;border:none;padding:10px 15px;border-radius:8px;cursor:pointer}
-button:hover{background:#0284c7}
-input,textarea,select{width:100%;padding:10px;margin-top:10px;border-radius:6px;border:none}
-.hidden{display:none}
-.star{font-size:22px;cursor:pointer;color:gray}
-.star.active{color:gold}
-.chat{height:150px;overflow:auto;background:#020617;padding:10px;border-radius:8px}
-.msg-user{color:#38bdf8}
-.msg-admin{color:#34d399}
-footer{background:#020617;text-align:center;padding:25px}
-html{scroll-behavior:smooth}
+.card{background:#020617;padding:20px;border-radius:12px;margin-bottom:20px}
+button{background:#0ea5e9;color:white;border:none;padding:10px;border-radius:6px}
+input{width:100%;padding:10px;margin-top:10px}
 </style>
 </head>
 
@@ -31,184 +21,50 @@ html{scroll-behavior:smooth}
 
 <header>
 <h1>Guardian Pet Services</h1>
-<p>Plataforma integral de cuidado para mascotas</p>
+<p>Cuidado profesional para tu mascota</p>
 </header>
 
 <nav>
-<a href="#login">Login</a>
 <a href="#servicios">Servicios</a>
 <a href="#carrito">Carrito</a>
-<a href="#chat">Chat</a>
-<a href="#resenas">Reseñas</a>
-<a href="#blog">Blog</a>
-<a href="#soporte">Atención al Cliente</a>
-<a href="#admin">Admin</a>
 </nav>
 
-<!-- LOGIN -->
-<section id="login">
-<div class="container">
-<div class="card">
-<h2>Inicio de Sesión</h2>
-<input id="user" placeholder="Usuario">
-<input id="pass" type="password" placeholder="Contraseña">
-<button onclick="login()">Ingresar</button>
-<p id="loginMsg"></p>
-</div>
-</div>
-</section>
-
-<!-- SERVICIOS -->
 <section id="servicios">
-<div class="container">
 <div class="card">
 <h2>Servicios</h2>
-<button onclick="addToCart('Cuidado a Domicilio',20)">Cuidado a Domicilio $20</button>
+<button onclick="addToCart('Cuidado',20)">Cuidado $20</button>
 <button onclick="addToCart('Paseo',15)">Paseo $15</button>
 <button onclick="addToCart('Veterinaria',30)">Veterinaria $30</button>
 </div>
-</div>
 </section>
 
-<!-- CARRITO -->
 <section id="carrito">
-<div class="container">
 <div class="card">
 <h2>Carrito</h2>
 <div id="cart"></div>
 <p>Total: $<span id="total">0</span></p>
-<button onclick="generateInvoice()">Pagar</button>
-<div id="invoice"></div>
-</div>
 </div>
 </section>
-
-<!-- CHAT -->
-<section id="chat">
-<div class="container">
-<div class="card">
-<h2>Chat con Cuidador</h2>
-<div class="chat" id="chatBox"></div>
-<input id="chatInput" placeholder="Escribe un mensaje">
-<button onclick="sendMsg()">Enviar</button>
-</div>
-</div>
-</section>
-
-<!-- RESEÑAS -->
-<section id="resenas">
-<div class="container">
-<div class="card">
-<h2>Calificación del Servicio</h2>
-<div id="stars">
-<span class="star" onclick="rate(1)">★</span>
-<span class="star" onclick="rate(2)">★</span>
-<span class="star" onclick="rate(3)">★</span>
-<span class="star" onclick="rate(4)">★</span>
-<span class="star" onclick="rate(5)">★</span>
-</div>
-<p id="ratingMsg"></p>
-</div>
-</div>
-</section>
-
-<!-- BLOG -->
-<section id="blog">
-<div class="container">
-<div class="card">
-<h2>Blog & Reseñas</h2>
-<input id="blogText" placeholder="Escribe tu reseña">
-<button onclick="addBlog()">Publicar</button>
-<div id="blogPosts"></div>
-</div>
-</div>
-</section>
-
-<!-- SOPORTE -->
-<section id="soporte">
-<div class="container">
-<div class="card">
-<h2>Atención al Cliente</h2>
-<input placeholder="Nombre">
-<input type="email" placeholder="Correo">
-<textarea placeholder="Describe tu consulta"></textarea>
-<button onclick="alert('Mensaje enviado al soporte')">Enviar</button>
-</div>
-</div>
-</section>
-
-<!-- ADMIN -->
-<section id="admin" class="hidden">
-<div class="container">
-<div class="card">
-<h2>Panel Administrador</h2>
-<p>Usuarios activos, ventas y mensajes</p>
-<p>Total Ventas: $<span id="adminSales">0</span></p>
-</div>
-</div>
-</section>
-
-<footer>
-<p>© 2026 Guardian Pet Services</p>
-</footer>
 
 <script>
-let cart=JSON.parse(localStorage.getItem("cart"))||[];
-let total=cart.reduce((s,i)=>s+i.p,0);
-let sales=0;
+let cart=[];
+let total=0;
 
-function login(){
- let u=user.value,p=pass.value;
- if(u==="admin"&&p==="1234"){
-  document.getElementById("admin").classList.remove("hidden");
-  loginMsg.innerText="Administrador conectado";
- }else{
-  loginMsg.innerText="Usuario conectado";
- }
+function addToCart(name,price){
+ cart.push({name,price});
+ total+=price;
+ render();
 }
 
-function addToCart(s,p){
- cart.push({s,p});
- total+=p;
- localStorage.setItem("cart",JSON.stringify(cart));
- renderCart();
-}
-
-function renderCart(){
- cartDiv.innerHTML="";
- cart.forEach(i=>cartDiv.innerHTML+=`<p>${i.s} $${i.p}</p>`);
- totalSpan.innerText=total;
-}
-
-function generateInvoice(){
- invoice.innerHTML=`<h3>Factura</h3><p>Total: $${total}</p><p>Gracias por su compra</p>`;
- sales+=total;
- adminSales.innerText=sales;
- cart=[];total=0;localStorage.removeItem("cart");
- renderCart();
-}
-
-function sendMsg(){
- chatBox.innerHTML+=`<p class="msg-user">Usuario: ${chatInput.value}</p>`;
- chatBox.innerHTML+=`<p class="msg-admin">Cuidador: Gracias por escribirnos</p>`;
- chatInput.value="";
-}
-
-function rate(n){
- document.querySelectorAll(".star").forEach((s,i)=>{
-  s.classList.toggle("active",i<n);
+function render(){
+ let c=document.getElementById("cart");
+ c.innerHTML="";
+ cart.forEach(i=>{
+  c.innerHTML+=`<p>${i.name} - $${i.price}</p>`;
  });
- ratingMsg.innerText=`Calificación: ${n} estrellas`;
+ document.getElementById("total").innerText=total;
 }
-
-function addBlog(){
- blogPosts.innerHTML+=`<p>📝 ${blogText.value}</p>`;
- blogText.value="";
-}
-
-renderCart();
 </script>
 
 </body>
 </html>
-

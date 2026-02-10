@@ -41,7 +41,10 @@ footer{background:#020617;text-align:center;padding:30px}
 
 <section id="inicio"><div class="container"><div class="card"><h2>Bienvenido</h2><p>Plataforma para clientes, cuidadores y administradores.</p></div></div></section>
 
-<section id="login"><div class="container"><div class="card"><h2>Inicio de Sesión</h2>
+<section id="login"><div class="container"><div class="card"><h2>Registro / Inicio de Sesión</h2>
+<input id="newuser" placeholder="Nuevo Usuario">
+<input type="password" id="newpass" placeholder="Nueva Contraseña">
+<button onclick="register()">Registrarse</button><hr><div class="container"><div class="card"><h2>Inicio de Sesión</h2>
 <select id="rol"><option>Cliente</option><option>Cuidador</option><option>Administrador</option></select>
 <input id="user" placeholder="Usuario">
 <input type="password" id="pass" placeholder="Contraseña">
@@ -101,6 +104,8 @@ footer{background:#020617;text-align:center;padding:30px}
 
 <script>
 let total=0;let role="";
+let isLogged=false;
+function register(){isLogged=true;alert('Registro exitoso');window.location.href='?section=inicio';}
 function login(){role=document.getElementById('rol').value;document.getElementById('loginMsg').innerText="Sesión iniciada como "+role;}
 function addService(n,p){total+=p;document.getElementById('total').innerText=total;notify("Servicio agregado");}
 function sendMsg(){let m=document.getElementById('msg').value;document.getElementById('chat').innerHTML+=`<p>${m}</p>`;notify("Nuevo mensaje enviado");}
@@ -108,7 +113,7 @@ function pay(){document.getElementById('payMsg').innerText="Pago confirmado corr
 function addReservation(){let d=document.getElementById('date').value;let t=document.getElementById('time').value;document.getElementById('calendar').innerHTML+=`<p>${d} ${t}</p>`;notify("Reserva creada");}
 function addReview(btn){let txt=btn.previousElementSibling.value;btn.nextElementSibling.innerHTML+=`<p>${txt}</p>`;notify("Reseña enviada");}
 function notify(msg){alert(msg);}
-function showSectionFromURL(){const params=new URLSearchParams(window.location.search);const sec=params.get('section');if(sec){document.querySelectorAll('section').forEach(s=>s.style.display='none');const target=document.getElementById(sec);if(target)target.style.display='block';}}
+function showSectionFromURL(){if(!isLogged){window.location.href='?section=login';return;}(){const params=new URLSearchParams(window.location.search);const sec=params.get('section');if(sec){document.querySelectorAll('section').forEach(s=>s.style.display='none');const target=document.getElementById(sec);if(target)target.style.display='block';}}
 showSectionFromURL();
 </script>
 </body>

@@ -12,7 +12,21 @@ nav{background:#020617;padding:10px;text-align:center}
 nav a{color:#38bdf8;margin:10px;text-decoration:none;font-weight:bold}
 section{padding:40px 20px}
 .container{max-width:1100px;margin:auto}
-.card{background:#020617;padding:25px;border-radius:15px;margin-bottom:20px}
+.card{
+ background: rgba(255,255,255,0.08);
+ backdrop-filter: blur(12px);
+ -webkit-backdrop-filter: blur(12px);
+ border-radius:15px;
+ padding:25px;
+ margin-bottom:20px;
+ border:1px solid rgba(255,255,255,0.15);
+ box-shadow:0 8px 25px rgba(0,0,0,0.4);
+ transition:0.3s;
+}
+.card:hover{
+ transform:translateY(-5px);
+ box-shadow:0 15px 35px rgba(0,0,0,0.6);
+}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
 button{background:#0ea5e9;color:white;border:none;padding:10px 15px;border-radius:8px;cursor:pointer}
 button:hover{background:#0284c7}
@@ -78,7 +92,7 @@ footer{background:#020617;text-align:center;padding:30px}
 <div id="calendar"></div>
 </div></div></section>
 
-<section id="pagos"><div class="container"><div class="card"><h2>Pago</h2>
+<section id="pagos"><div class="container"><div class="card"><h2>Carrito</h2><div id="listaCarrito"></div><div class="container"><div class="card"><h2>Pago</h2>
 <p>Total: $<span id="total">0</span></p>
 <select><option>Tarjeta</option><option>PayPal</option><option>Yappy</option></select>
 <button onclick="pay()">Pagar</button>
@@ -104,12 +118,28 @@ footer{background:#020617;text-align:center;padding:30px}
 
 <script>
 let total=0;let role="";
+let carrito=[];
 let isLogged=false;
 function register(){isLogged=true;alert('Registro exitoso');window.location.href='?section=inicio';}
 function login(){role=document.getElementById('rol').value;document.getElementById('loginMsg').innerText="Sesión iniciada como "+role;}
-function addService(n,p){total+=p;document.getElementById('total').innerText=total;notify("Servicio agregado");}
+function addService(n,p){
+ carrito.push({nombre:n,precio:p});
+ total+=p;
+ document.getElementById('total').innerText=total;
+ notify("Servicio agregado al carrito");
+}
 function sendMsg(){let m=document.getElementById('msg').value;document.getElementById('chat').innerHTML+=`<p>${m}</p>`;notify("Nuevo mensaje enviado");}
-function pay(){document.getElementById('payMsg').innerText="Pago confirmado correctamente";total=0;document.getElementById('total').innerText=0;notify("Pago exitoso");}
+function pay(){
+ if(total===0){alert('No hay servicios en el carrito');return;}
+ let html="<h3>Servicios Pagados:</h3>";
+ carrito.forEach(s=>{html+=`<p>${s.nombre} - $${s.precio}</p>`});
+ document.getElementById('listaCarrito').innerHTML=html;
+ document.getElementById('payMsg').innerText="Pago confirmado correctamente";
+ carrito=[];
+ total=0;
+ document.getElementById('total').innerText=0;
+ notify("Pago exitoso");
+}
 function addReservation(){let d=document.getElementById('date').value;let t=document.getElementById('time').value;document.getElementById('calendar').innerHTML+=`<p>${d} ${t}</p>`;notify("Reserva creada");}
 function addReview(btn){let txt=btn.previousElementSibling.value;btn.nextElementSibling.innerHTML+=`<p>${txt}</p>`;notify("Reseña enviada");}
 function notify(msg){alert(msg);}

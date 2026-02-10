@@ -122,10 +122,17 @@ let carrito=[];
 let isLogged=false;
 function register(){isLogged=true;alert('Registro exitoso');window.location.href='?section=inicio';}
 function login(){role=document.getElementById('rol').value;document.getElementById('loginMsg').innerText="Sesión iniciada como "+role;}
+function renderCart(){
+ let html="";
+ carrito.forEach((s,i)=>{html+=`<p>${i+1}. ${s.nombre} - $${s.precio}</p>`});
+ document.getElementById('listaCarrito').innerHTML=html;
+}
+
 function addService(n,p){
  carrito.push({nombre:n,precio:p});
  total+=p;
  document.getElementById('total').innerText=total;
+ renderCart();
  notify("Servicio agregado al carrito");
 }
 function sendMsg(){let m=document.getElementById('msg').value;document.getElementById('chat').innerHTML+=`<p>${m}</p>`;notify("Nuevo mensaje enviado");}
@@ -143,7 +150,13 @@ function pay(){
 function addReservation(){let d=document.getElementById('date').value;let t=document.getElementById('time').value;document.getElementById('calendar').innerHTML+=`<p>${d} ${t}</p>`;notify("Reserva creada");}
 function addReview(btn){let txt=btn.previousElementSibling.value;btn.nextElementSibling.innerHTML+=`<p>${txt}</p>`;notify("Reseña enviada");}
 function notify(msg){alert(msg);}
-function showSectionFromURL(){if(!isLogged){window.location.href='?section=login';return;}(){const params=new URLSearchParams(window.location.search);const sec=params.get('section');if(sec){document.querySelectorAll('section').forEach(s=>s.style.display='none');const target=document.getElementById(sec);if(target)target.style.display='block';}}
+function showSectionFromURL(){
+ const params=new URLSearchParams(window.location.search);
+ const sec=params.get('section') || 'inicio';
+ document.querySelectorAll('section').forEach(s=>s.style.display='none');
+ const target=document.getElementById(sec);
+ if(target)target.style.display='block';
+}
 showSectionFromURL();
 </script>
 </body>

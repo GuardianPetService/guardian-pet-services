@@ -39,7 +39,9 @@ footer{background:#020617;text-align:center;padding:30px}
 <a href="?section=admin">Panel Admin</a>
 </nav>
 
+
 <section id="inicio"><div class="container"><div class="card"><h2>Bienvenido</h2><p>Plataforma para clientes, cuidadores y administradores.</p></div></div></section>
+
 
 <section id="login"><div class="container"><div class="card"><h2>Registro / Inicio de Sesión</h2>
 <input id="newuser" placeholder="Nuevo Usuario">
@@ -52,6 +54,7 @@ footer{background:#020617;text-align:center;padding:30px}
 <p id="loginMsg"></p>
 </div></div></section>
 
+
 <section id="servicios"><div class="container"><h2>Servicios</h2><div class="grid">
 <div class="card"><h3>🐕 Paseo</h3><img src="https://images.unsplash.com/featured/?dog-walking" width="100%"><p>Paseos diarios con cuidadores certificados.</p><p>Duración: 30-45 min</p><p>$15</p><button onclick="addService('Paseo',15)">Agregar</button></div>
 <div class="card"><h3>🏠 Cuidado</h3><img src="https://images.unsplash.com/featured/?pet-care" width="100%"><p>Atención personalizada en tu hogar.</p><p>Duración: Por horas</p><p>$20</p><button onclick="addService('Cuidado',20)">Agregar</button></div>
@@ -60,16 +63,19 @@ footer{background:#020617;text-align:center;padding:30px}
 <div class="card"><h3>🏨 Hospedaje</h3><img src="https://images.unsplash.com/featured/?pet-hotel" width="100%"><p>Alojamiento cómodo y seguro.</p><p>Duración: Por noche</p><p>$40</p><button onclick="addService('Hospedaje',40)">Agregar</button></div>
 </div></div></section>
 
+
 <section id="cuidadores"><div class="container"><h2>Perfiles de Cuidadores</h2><div class="grid">
 <div class="card"><h3>Ana Pérez</h3><p>⭐⭐⭐⭐⭐</p><textarea placeholder="Deja tu reseña"></textarea><button onclick="addReview(this)">Enviar</button><div class="reviews"></div></div>
 <div class="card"><h3>Carlos Gómez</h3><p>⭐⭐⭐⭐</p><textarea placeholder="Deja tu reseña"></textarea><button onclick="addReview(this)">Enviar</button><div class="reviews"></div></div>
 </div></div></section>
+
 
 <section id="mensajes"><div class="container"><div class="card"><h2>Mensajería</h2>
 <textarea id="msg"></textarea>
 <button onclick="sendMsg()">Enviar</button>
 <div id="chat"></div>
 </div></div></section>
+
 
 <section id="calendario"><div class="container"><div class="card"><h2>Calendario de Reservas</h2>
 <input type="date" id="date">
@@ -78,43 +84,19 @@ footer{background:#020617;text-align:center;padding:30px}
 <div id="calendar"></div>
 </div></div></section>
 
+
 <section id="pagos"><div class="container"><div class="card"><h2>Pago</h2>
 <p>Total: $<span id="total">0</span></p>
-<select><option>Tarjeta</option><option>PayPal</option><option>Yappy</option></select>
+<select id="metodo">
+<option value="Tarjeta">Tarjeta</option>
+<option value="PayPal">PayPal</option>
+<option value="Yappy">Yappy</option>
+</select>
+<input placeholder="Número de referencia o tarjeta">
 <button onclick="pay()">Pagar</button>
 <p id="payMsg"></p>
+<div id="factura"></div>
 </div></div></section>
 
-<section id="blog"><div class="container"><h2>Blog</h2><div class="card"><h3>Cómo cuidar a tu mascota</h3><p>Consejos básicos.</p></div></div></section>
 
-<section id="atencion"><div class="container"><h2>Atención al Cliente</h2><div class="card"><p>Chat en línea, FAQs, soporte 24/7</p></div></div></section>
 
-<section id="admin"><div class="container"><div class="card"><h2>Panel Admin</h2><p>Gestión de usuarios, cuidadores y reservas.</p></div></div></section>
-
-<section id="estadisticas"><div class="container"><div class="card"><h2>Panel de Estadísticas</h2><p>Total de usuarios: 120</p><p>Reservas del mes: 45</p><p>Ingresos estimados: $1,250</p></div></div></section>
-
-<footer>
-<p>© Guardian Pet Services</p>
-<p>
-<a href="https://www.instagram.com/gpetservices/" target="_blank">Instagram</a> |
-<a href="https://www.tiktok.com/@gpetservices" target="_blank">TikTok</a> |
-<a href="https://www.threads.com/@gpetservices" target="_blank">Threads</a>
-</p>
-</footer>
-
-<script>
-let total=0;let role="";
-let isLogged=false;
-function register(){isLogged=true;alert('Registro exitoso');window.location.href='?section=inicio';}
-function login(){role=document.getElementById('rol').value;document.getElementById('loginMsg').innerText="Sesión iniciada como "+role;}
-function addService(n,p){total+=p;document.getElementById('total').innerText=total;notify("Servicio agregado");}
-function sendMsg(){let m=document.getElementById('msg').value;document.getElementById('chat').innerHTML+=`<p>${m}</p>`;notify("Nuevo mensaje enviado");}
-function pay(){document.getElementById('payMsg').innerText="Pago confirmado correctamente";total=0;document.getElementById('total').innerText=0;notify("Pago exitoso");}
-function addReservation(){let d=document.getElementById('date').value;let t=document.getElementById('time').value;document.getElementById('calendar').innerHTML+=`<p>${d} ${t}</p>`;notify("Reserva creada");}
-function addReview(btn){let txt=btn.previousElementSibling.value;btn.nextElementSibling.innerHTML+=`<p>${txt}</p>`;notify("Reseña enviada");}
-function notify(msg){alert(msg);}
-function showSectionFromURL(){if(!isLogged){window.location.href='?section=login';return;}(){const params=new URLSearchParams(window.location.search);const sec=params.get('section');if(sec){document.querySelectorAll('section').forEach(s=>s.style.display='none');const target=document.getElementById(sec);if(target)target.style.display='block';}}
-showSectionFromURL();
-</script>
-</body>
-</html>
